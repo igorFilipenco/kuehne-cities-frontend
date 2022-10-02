@@ -1,11 +1,16 @@
 import axios from "axios";
-import {API_URL_DEV, API_VERSION} from "../constant/api";
+import {API_VERSION} from "../constant/api";
 
+/**
+ * API method to update city info. Receives fully updated object for PUT request
+ * @param updatedCity
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export const editCityInfo = async (updatedCity) =>{
+    const url = API_VERSION + '/city/update';
 
-export const fetchData = async () =>{
-    const url = API_URL_DEV + API_VERSION + ''
     try {
-        const {data: response} = await axios.get('/stuff/to/fetch');
+        return await axios.put(url, updatedCity);
     } catch (error) {
         console.error(error.message);
     }

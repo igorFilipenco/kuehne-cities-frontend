@@ -11,6 +11,19 @@
   margin: auto;
 }
 
+.app-edit-city-input {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.app-city-name-header {
+  margin: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  display: inline;
+}
+
+
 
 
 

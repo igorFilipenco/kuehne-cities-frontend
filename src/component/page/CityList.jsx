@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {List, Space} from 'antd';
 import LoadMoreButton from "./LoadMoreButton";
 import Search from "antd/es/input/Search";
+import CityListItemContent from "./CityListItemContent";
 //api
 import {getCities} from "../api/getCities";
 import {getCityByName} from "../api/getCityByName";
@@ -12,13 +13,16 @@ const CityList = () => {
     const [cityData, setCityData] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
 
+    const requestCities = (page) => {
+        getCities(page ? page : currentPage).then(response => setCityData(response?.data));
+    }
     useEffect(() => {
-        getCities(currentPage).then(response => setCityData(response?.data));
+        requestCities();
     }, []);
 
     const onSearch = (cityName) => {
         if (cityName.length === 0) {
-            getCities(currentPage).then(response => setCityData(response?.data));
+            requestCities();
         }
         getCityByName(cityName).then(response => setCityData(response?.data));
     }
@@ -62,7 +66,11 @@ const CityList = () => {
                             />
                         }
                     >
-                        {item.name}
+                        <CityListItemContent
+                            city={item}
+                            currentPage={currentPage}
+                            requestCities={requestCities}
+                        />
                     </List.Item>
                 )}
             />
