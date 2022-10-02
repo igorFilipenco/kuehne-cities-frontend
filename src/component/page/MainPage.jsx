@@ -5,7 +5,6 @@ import {Col, Divider, Row} from "antd";
 
 const MainPage = () => {
 
-
     return (
         <BaseLayout>
             <Row>

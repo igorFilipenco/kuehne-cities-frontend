@@ -1,31 +1,39 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 //component
-import { List } from 'antd';
+import {List} from 'antd';
+import LoadMoreButton from "./LoadMoreButton";
+//api
+import {getCities} from "../api/getCities";
 
 
 const CityList = () => {
-    const data = Array.from({length: 23}).map((_, i) => ({
-        href: 'https://ant.design',
-        title: `ant design part ${i}`,
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        description:
-            'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-        content:
-            'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-    }));
+    const [cityData, setCityData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        getCities(currentPage).then(response => setCityData(response?.data));
+    }, []);
+
+    const onLoadMore = () => {
+        const nextPage = currentPage + 1;
+        getCities(nextPage)
+            .then(response => {
+                let clonedCityData = {...cityData}
+                let currentCityList = [...clonedCityData.data];
+                response?.data?.data.forEach(city => currentCityList.push(city));
+                clonedCityData.data = currentCityList;
+                clonedCityData.page = response?.data?.page;
+                setCityData(clonedCityData);
+            });
+        setCurrentPage(nextPage);
+    }
 
     return (
         <List
             itemLayout="vertical"
             size="large"
-            pagination={{
-                onChange: page => {
-                    console.log(page);
-                },
-                pageSize: 3,
-            }}
-            dataSource={data}
-
+            loadMore={<LoadMoreButton onLoadMore={onLoadMore}/>}
+            dataSource={cityData?.data}
             renderItem={item => (
                 <List.Item
                     key={item.title}
@@ -33,12 +41,11 @@ const CityList = () => {
                         <img
                             width={290}
                             alt="logo"
-                            src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                            src={item.image}
                         />
                     }
                 >
-
-                    {item.content}
+                    {item.name}
                 </List.Item>
             )}
         />
