@@ -1,0 +1,17 @@
+.App {
+  text-align: center;
+}
+
+.app-layout {
+  margin-top: 45px;
+  flex: 1;
+}
+
+.app-city-list-wrapper{
+  margin: auto;
+}
+
+
+
+
+
